@@ -4,14 +4,25 @@ public final class AppConstants {
         private AppConstants(){
         }
 
+        // Validaciones de CÉDULA
+        public static final String CEDULA_OBLIGATORIA =
+                "La cédula es obligatoria";
+
+        public static final String CEDULA_INVALIDA =
+                "La cédula debe ser un número válido y positivo";
+
+        public static final String CEDULA_YA_REGISTRADA =
+                "La cédula ya está registrada en el sistema";
+
+        public static final String CEDULA_INMUTABLE =
+                "La cédula no puede ser modificada. Es una propiedad inmutable del registro";
+
+        // Validaciones de PERSONA
         public static final String PERSONA_NO_ENCONTRADA =
                 "Persona no encontrada";
 
         public static final String CORREO_EN_USO =
                 "El correo ya está en uso";
-
-        public static final String ID_NO_MODIFICABLE =
-                "El ID no puede modificarse";
 
         public static final String PERSONA_ACTUALIZADA =
                 "Persona actualizada correctamente";
@@ -36,9 +47,6 @@ public final class AppConstants {
 
         public static final String PERSONA_CREADA =
                 "Persona creada correctamente";
-
-        public static final String ID_AUTOGENERADO =
-                "El ID es generado automáticamente y no puede asignarse manualmente";
 
         public static final String PERSONA_ELIMINADA =
                 "Persona eliminada correctamente";
