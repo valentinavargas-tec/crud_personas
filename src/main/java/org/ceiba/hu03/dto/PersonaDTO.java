@@ -12,6 +12,7 @@ import java.time.LocalDate;
  * DTO para transportar datos de Persona sin exponer la entidad @Entity.
  * Desacopla la API del modelo de persistencia.
  */
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

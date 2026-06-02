@@ -38,9 +38,7 @@ public class PersonaService {
 
     public Persona buscarPorCedula(Long cedula) {
         return personaRepository.findById(cedula)
-                .orElseThrow(() ->
-                        new PersonaNotFoundException(AppConstants.PERSONA_NO_ENCONTRADA)
-                );
+                .orElseThrow(() -> new PersonaNotFoundException(AppConstants.PERSONA_NO_ENCONTRADA));
     }
 
     public PersonaDTO buscarPorCedulaDTO(Long cedula) {
@@ -87,8 +85,7 @@ public class PersonaService {
     private void validarCedulaUnica(Long cedula) {
         if (personaRepository.existsById(cedula)) {
             throw new PersonaAlreadyExistsException(
-                    AppConstants.CEDULA_YA_REGISTRADA
-            );
+                    AppConstants.CEDULA_YA_REGISTRADA);
         }
     }
 
