@@ -50,7 +50,13 @@ class PersonaServiceTest {
     //Tests para crear persona exitosamente
     @Test
     void should_ReturnPersonaResponse_When_PersonaIsCreatedSuccessfully() {
-        Persona personaMock = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
+        Persona personaMock = Persona.builder()
+            .cedula(CEDULA_EXISTENTE)
+            .nombre(NOMBRE_EXISTENTE)
+            .apellido(APELLIDO_EXISTENTE)
+            .email(EMAIL_EXISTENTE)
+            .fechaNacimiento(FECHA_NACIMIENTO)
+            .build();
         
         when(personaRepository.existsById(CEDULA_EXISTENTE)).thenReturn(false);
         when(personaRepository.existsByEmail(EMAIL_EXISTENTE)).thenReturn(false);
@@ -68,7 +74,7 @@ class PersonaServiceTest {
     //Tests para crear persona con datos inválidos (casos de error)
     @Test
     void should_ThrowPersonaAlreadyExistsException_When_CedulaAlreadyExists() {
-        Persona personaMock = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
+        Persona personaMock = crearPersonaMock();
         
         when(personaRepository.existsById(CEDULA_EXISTENTE)).thenReturn(true);
 
@@ -78,7 +84,7 @@ class PersonaServiceTest {
 
     @Test
     void should_ThrowEmailAlreadyExistsException_When_EmailAlreadyExists() {
-        Persona personaMock = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
+        Persona personaMock = crearPersonaMock();
         
         when(personaRepository.existsById(CEDULA_EXISTENTE)).thenReturn(false);
         when(personaRepository.existsByEmail(EMAIL_EXISTENTE)).thenReturn(true);
@@ -91,7 +97,7 @@ class PersonaServiceTest {
     // existente
     @Test
     void should_ReturnPersona_When_IdExists() {
-        Persona personaMock = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
+        Persona personaMock = crearPersonaMock();
         when(personaRepository.findById(CEDULA_EXISTENTE)).thenReturn(Optional.of(personaMock));
 
         Persona resultado = personaService.buscarPorCedula(CEDULA_EXISTENTE);
@@ -113,8 +119,15 @@ class PersonaServiceTest {
     // funciona para saber cómo me trae la lista completa y cómo convierte cada registro a DTO
     @Test
     void should_ReturnListOfPersonaDTOs_When_ListarIsCalled() {
-        Persona p1 = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
-        Persona p2 = new Persona(789012L, "Carlos", "Zapata", "carlos@email.com", LocalDate.of(1995, 5, 10));
+        Persona p1 = crearPersonaMock();
+        Persona p2 = Persona.builder()
+            .cedula(789012L)
+            .nombre("Carlos")
+            .apellido("Zapata")
+            .email("carlos@email.com")
+            .fechaNacimiento(LocalDate.of(1995, 5, 10))
+            .build();
+
         List<Persona> listaMock = List.of(p1, p2);
 
         when(personaRepository.findAllByOrderByApellidoAsc()).thenReturn(listaMock);
@@ -129,8 +142,14 @@ class PersonaServiceTest {
     // Tests para actualizar persona
     @Test
     void should_ReturnPersonaResponse_When_PersonaIsUpdatedSuccessfully() {
-        Persona personaExistente = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
-        Persona personaActualizada = new Persona(CEDULA_EXISTENTE, "Vale", APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
+        Persona personaExistente = crearPersonaMock();
+        Persona personaActualizada = Persona.builder()
+            .cedula(CEDULA_EXISTENTE)
+            .nombre("Vale")
+            .apellido(APELLIDO_EXISTENTE)
+            .email(EMAIL_EXISTENTE)
+            .fechaNacimiento(FECHA_NACIMIENTO)
+            .build();
 
         when(personaRepository.findById(CEDULA_EXISTENTE)).thenReturn(Optional.of(personaExistente));
         when(personaRepository.save(any(Persona.class))).thenReturn(personaActualizada);
@@ -145,8 +164,14 @@ class PersonaServiceTest {
     // fallido por intentar modificar la cédula
     @Test
     void should_ThrowCedulaInmutableException_When_TryingToUpdateCedula() {
-        Persona personaExistente = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
-        Persona personaConNuevaCedula = new Persona(CEDULA_NO_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
+        Persona personaExistente = crearPersonaMock();
+            Persona personaConNuevaCedula = Persona.builder()
+            .cedula(CEDULA_NO_EXISTENTE)
+            .nombre(NOMBRE_EXISTENTE)
+            .apellido(APELLIDO_EXISTENTE)
+            .email(EMAIL_EXISTENTE)
+            .fechaNacimiento(FECHA_NACIMIENTO)
+            .build();
 
         when(personaRepository.findById(CEDULA_EXISTENTE)).thenReturn(Optional.of(personaExistente));
 
@@ -157,8 +182,14 @@ class PersonaServiceTest {
     // exitoso cambiando el correo electrónico (valida si el nuevo correo no está repetido)
     @Test
     void should_ValidateNewEmail_When_PersonaUpdatesWithDifferentEmail() {
-        Persona personaExistente = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
-        Persona personaNuevoEmail = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_NUEVO, FECHA_NACIMIENTO);
+        Persona personaExistente = crearPersonaMock();
+        Persona personaNuevoEmail = Persona.builder()
+                .cedula(CEDULA_EXISTENTE)
+                .nombre(NOMBRE_EXISTENTE)
+                .apellido(APELLIDO_EXISTENTE)
+                .email(EMAIL_NUEVO)
+                .fechaNacimiento(FECHA_NACIMIENTO)
+                .build();
 
         when(personaRepository.findById(CEDULA_EXISTENTE)).thenReturn(Optional.of(personaExistente));
         when(personaRepository.existsByEmail(EMAIL_NUEVO)).thenReturn(false);
@@ -174,7 +205,7 @@ class PersonaServiceTest {
     // funciona para saber cómo imprime el DTO y cómo me trae los datos
     @Test
     void should_ReturnPersonaDTO_When_BuscarPorCedulaDTOIsCalled() {
-        Persona personaMock = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
+        Persona personaMock = crearPersonaMock();
         when(personaRepository.findById(CEDULA_EXISTENTE)).thenReturn(Optional.of(personaMock));
 
         PersonaDTO resultado = personaService.buscarPorCedulaDTO(CEDULA_EXISTENTE);
@@ -186,7 +217,8 @@ class PersonaServiceTest {
     // Tests para eliminar persona
     @Test
     void should_ReturnPersonaResponse_When_PersonaIsDeletedSuccessfully() {
-        Persona personaMock = new Persona(CEDULA_EXISTENTE, NOMBRE_EXISTENTE, APELLIDO_EXISTENTE, EMAIL_EXISTENTE, FECHA_NACIMIENTO);
+        Persona personaMock = crearPersonaMock();
+        
         when(personaRepository.findById(CEDULA_EXISTENTE)).thenReturn(Optional.of(personaMock));
 
         PersonaResponse resultado = personaService.eliminar(CEDULA_EXISTENTE);
@@ -194,5 +226,15 @@ class PersonaServiceTest {
         assertNotNull(resultado);
         verify(personaRepository, times(1)).delete(personaMock);
     }
+
+    private Persona crearPersonaMock() {
+    return Persona.builder()
+            .cedula(CEDULA_EXISTENTE)
+            .nombre(NOMBRE_EXISTENTE)
+            .apellido(APELLIDO_EXISTENTE)
+            .email(EMAIL_EXISTENTE)
+            .fechaNacimiento(FECHA_NACIMIENTO)
+            .build();
+}
 }
 
