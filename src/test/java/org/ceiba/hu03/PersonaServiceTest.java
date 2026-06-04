@@ -23,6 +23,7 @@ import org.ceiba.hu03.exception.PersonaAlreadyExistsException;
 import org.ceiba.hu03.exception.PersonaNotFoundException;
 import org.ceiba.hu03.repository.PersonaRepository;
 import org.ceiba.hu03.service.PersonaService;
+import org.ceiba.hu03.service.PersonaServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,7 +46,7 @@ class PersonaServiceTest {
     private PersonaRepository personaRepository;
 
     @InjectMocks
-    private PersonaService personaService;
+    private PersonaServiceImpl personaService;
 
     //Tests para crear persona exitosamente
     @Test
