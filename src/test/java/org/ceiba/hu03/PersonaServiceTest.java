@@ -22,7 +22,6 @@ import org.ceiba.hu03.exception.EmailAlreadyExistsException;
 import org.ceiba.hu03.exception.PersonaAlreadyExistsException;
 import org.ceiba.hu03.exception.PersonaNotFoundException;
 import org.ceiba.hu03.repository.PersonaRepository;
-import org.ceiba.hu03.service.PersonaService;
 import org.ceiba.hu03.service.PersonaServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +50,7 @@ class PersonaServiceTest {
     //Tests para crear persona exitosamente
     @Test
     void should_ReturnPersonaResponse_When_PersonaIsCreatedSuccessfully() {
+        //Arrange
         Persona personaMock = Persona.builder()
             .cedula(CEDULA_EXISTENTE)
             .nombre(NOMBRE_EXISTENTE)
@@ -63,8 +63,10 @@ class PersonaServiceTest {
         when(personaRepository.existsByEmail(EMAIL_EXISTENTE)).thenReturn(false);
         when(personaRepository.save(any(Persona.class))).thenReturn(personaMock);
 
+        //Act
         PersonaResponse resultado = personaService.crear(personaMock);
 
+        //Assert
         assertNotNull(resultado);
         assertEquals(AppConstants.PERSONA_CREADA, resultado.getMensaje());
         assertNotNull(resultado.getPersona());
@@ -236,6 +238,6 @@ class PersonaServiceTest {
             .email(EMAIL_EXISTENTE)
             .fechaNacimiento(FECHA_NACIMIENTO)
             .build();
-}
+    }
 }
 

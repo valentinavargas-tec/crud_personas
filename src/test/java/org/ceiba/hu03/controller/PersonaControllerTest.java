@@ -59,7 +59,6 @@ public class PersonaControllerTest {
 
         @BeforeEach
         void setUp() {
-                // Estructuras de prueba basadas en DTOs y Entidades reales
                 personaDTO = PersonaDTO.builder()
                                 .cedula(CEDULA_EXISTENTE)
                                 .nombre(NOMBRE_EXISTENTE)
@@ -91,6 +90,7 @@ public class PersonaControllerTest {
                 mockMvc.perform(post("/api/personas")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(personaDominio)))
+                                
                                 .andExpect(status().isCreated())
                                 .andExpect(jsonPath("$.mensaje").value("Operación exitosa"))
                                 .andExpect(jsonPath("$.persona.cedula").value(CEDULA_EXISTENTE))
