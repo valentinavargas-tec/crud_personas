@@ -1,0 +1,121 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'org.owasp:dependency-check-gradle:8.4.3'
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version  "${springBootVersion}"
+	id 'io.spring.dependency-management' version '1.1.3'
+	id 'java'
+	id 'info.solidsoft.pitest' version '1.15.0'
+	id 'com.github.jk1.dependency-license-report' version '2.9'
+}
+
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+	apply plugin: 'org.owasp.dependencycheck'
+
+	project.ext.apachecommons = [
+			"commons-io:commons-io:2.16.1",
+			"org.apache.commons:commons-lang3:3.7"
+	]
+
+	tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+	tasks.withType(Test) {
+		systemProperty "file.encoding", "UTF-8"
+		useJUnitPlatform()
+	}
+
+	project.ext.actuator = ["org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"]
+	project.ext.springdoc = ["org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0"]
+
+	project.ext.mockitocore = ['org.mockito:mockito-core:3.11.2']
+	project.ext.mockitoinline = ['org.mockito:mockito-inline:3.11.2']
+	project.ext.mockitojupiter = ['org.mockito:mockito-junit-jupiter:3.11.2']
+
+	project.ext.springboottest = ["org.springframework.boot:spring-boot-starter-test:${springBootVersion}"]
+	project.ext.springbootweb = ["org.springframework.boot:spring-boot-starter-web:${springBootVersion}"]
+	project.ext.springdevtools = ["org.springframework.boot:spring-boot-devtools:${springBootVersion}"]
+	project.ext.springbootundertow = ["org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"]
+	project.ext.springbootvalidation = ["org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"]
+	project.ext.archunit = ['com.tngtech.archunit:archunit-junit5:1.3.0']
+
+	// Se excluye JUnit 4
+	configurations {
+		runtime.exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+	project.ext.springtxt = [
+							  	"org.springframework:spring-tx:${springVersion}",
+							  	"org.springframework:spring-context:${springVersion}"
+							]
+
+
+	project.ext.db = ["org.postgresql:postgresql:42.7.4"]
+
+	project.ext.springbootjdbc = ["org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"]
+	project.ext.flyway = ["org.flywaydb:flyway-core:10.22.0", "org.flywaydb:flyway-database-postgresql:10.22.0"]
+	project.ext.flywaytest = ["org.flywaydb.flyway-test-extensions:flyway-spring-test:10.0.0"]
+
+	project.ext.h2 = ["com.h2database:h2:2.2.224"]
+
+}
+
+group = 'ceiba.com.co'
+version = '0.0.1-SNAPSHOT'
+java {
+	sourceCompatibility = '21'
+}
+
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	configurations {
+		runtime.exclude module: 'spring-boot-starter-tomcat'
+		compile.exclude module: 'spring-boot-starter-tomcat'
+	}
+
+	implementation project.ext.springbootweb
+	runtimeOnly project.ext.springdevtools
+
+	implementation project.ext.springbootundertow
+	implementation project.ext.flyway
+
+	implementation project(':infraestructura')
+}
+	bootJar {
+		archiveFileName = 'app.jar'
+	}
+
+	jar {
+		enabled = false
+	}
+
+	dependencyCheck {
+		formats = ['HTML', 'JSON']
+	}
+
+	check {
+		dependsOn checkLicense
+	}
+
+	apply plugin: 'com.github.jk1.dependency-license-report'
+
+	licenseReport {
+		configurations = ALL
+		allowedLicensesFile = new File("$projectDir/allowed-licenses.json")
+		filters = [new com.github.jk1.license.filter.LicenseBundleNormalizer(bundlePath: "$projectDir/license-normalizer-bundle.json")]
+		renderers = [new com.github.jk1.license.render.CsvReportRenderer()]
+	}
