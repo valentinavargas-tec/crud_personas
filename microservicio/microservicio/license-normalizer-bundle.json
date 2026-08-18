@@ -1,0 +1,110 @@
+{
+  "bundles": [
+    {
+      "bundleName": "Apache-2.0",
+      "licenseName": "Apache License, Version 2.0"
+    },
+    {
+      "bundleName": "EPL-1.0",
+      "licenseName": "Eclipse Public License - v 1.0"
+    },
+    {
+      "bundleName": "EPL-2.0",
+      "licenseName": "Eclipse Public License - v 2.0"
+    },
+    {
+      "bundleName": "MPL-2.0",
+      "licenseName": "Mozilla Public License 2.0"
+    },
+    {
+      "bundleName": "BSD-0-Clause",
+      "licenseName": "BSD Zero Clause License"
+    },
+    {
+      "bundleName": "BSD-3-Clause",
+      "licenseName": "The 3-Clause BSD License"
+    },
+    {
+      "bundleName": "BSD-2-Clause",
+      "licenseName": "The 2-Clause BSD License"
+    },
+    {
+      "bundleName": "CC-Legal-Code",
+      "licenseName": "Creative Commons Legal Code"
+    },
+    {
+      "bundleName": "Public-Domain",
+      "licenseName": "PUBLIC DOMAIN"
+    },
+    {
+      "bundleName": "LGPL-2.1",
+      "licenseName": "GNU Lesser General Public License v2.1"
+    }
+  ],
+  "transformationRules": [
+    {
+      "bundleName": "Apache-2.0",
+      "licenseNamePattern": ".*The Apache Software License, Version 2\\.0.*"
+    },
+    {
+      "bundleName": "Apache-2.0",
+      "licenseNamePattern": "Apache[ |-|_]2.*"
+    },
+    {
+      "bundleName": "Apache-2.0",
+      "licenseNamePattern": "ASL 2\\.0"
+    },
+    {
+      "bundleName": "Apache-2.0",
+      "licenseNamePattern": ".*Apache License,?( Version)? 2.*"
+    },
+    {
+      "bundleName": "Apache-2.0",
+      "licenseUrlPattern": ".*(www\\.)?opensource\\.org/licenses/Apache-2\\.0.*"
+    },
+    {
+      "bundleName": "Apache-2.0",
+      "licenseUrlPattern": ".*www\\.apache\\.org/licenses/LICENSE-2\\.0.*"
+    },
+    {
+      "bundleName": "Apache-2.0",
+      "licenseFileContentPattern": ".*Apache License,?( Version)? 2.*"
+    },
+    {
+      "bundleName": "EPL-1.0",
+      "licenseNamePattern": "Eclipse Public License.*(v|version)\\.?\\s?1(\\.?0)?"
+    },
+    {
+      "bundleName": "MPL-2.0",
+      "licenseNamePattern": "MPL 2\\.0"
+    },
+    {
+      "bundleName": "BSD-0-Clause",
+      "licenseNamePattern": "BSD Zero Clause License"
+    },
+    {
+      "bundleName": "BSD-3-Clause",
+      "licenseNamePattern": "The 3-Clause BSD License"
+    },
+    {
+      "bundleName": "BSD-2-Clause",
+      "licenseNamePattern": "The 2-Clause BSD License"
+    },
+    {
+      "bundleName": "CC-Legal-Code",
+      "licenseNamePattern": "Creative Commons Legal Code"
+    },
+    {
+      "bundleName": "Public-Domain",
+      "licenseNamePattern": "PUBLIC DOMAIN"
+    },
+    {
+      "bundleName": "LGPL-2.1",
+      "licenseNamePattern": "LGPL-2.1"
+    },
+    {
+      "bundleName": "LGPL-2.1",
+      "licenseNamePattern": "\"LGPL-2.1\""
+    }
+  ]
+}

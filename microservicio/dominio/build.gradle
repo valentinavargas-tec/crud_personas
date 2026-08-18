@@ -1,0 +1,55 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+}
+
+plugins {
+	id 'info.solidsoft.pitest' version '1.15.0'
+}
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+group = 'ceiba.com.co'
+version = '0.0.1-SNAPSHOT'
+java {
+	sourceCompatibility = '21'
+}
+
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation project.ext.springboottest
+	testImplementation project.ext.mockitocore
+	testImplementation project.ext.mockitoinline
+	testImplementation project.ext.mockitojupiter
+	testImplementation project.ext.archunit
+
+
+	implementation project(':comun:comun-dominio')
+}
+
+pitest {
+	junit5PluginVersion = "1.2.1"
+	testSourceSets = [sourceSets.test]
+	mainSourceSets = [sourceSets.main]
+	outputFormats = ['XML', 'HTML']
+	useClasspathFile = true
+	mutationThreshold = 90
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+	}
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}

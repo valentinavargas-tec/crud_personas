@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+group = 'ceiba.com.co'
+version = '0.0.1-SNAPSHOT'
+java {
+	sourceCompatibility = '21'
+}
+
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation project.ext.springtxt
+}

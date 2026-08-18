@@ -1,0 +1,96 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	configurations.maybeCreate('pitest')
+	dependencies {
+		pitest 'org.pitest:pitest-junit5-plugin:0.12'
+	}
+}
+
+plugins {
+	id 'info.solidsoft.pitest' version '1.15.0'
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'jacoco'
+
+group = 'ceiba.com.co'
+version = '0.0.1-SNAPSHOT'
+java {
+	sourceCompatibility = '21'
+}
+
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation project.ext.mockitocore
+	testImplementation project.ext.mockitoinline
+	testImplementation project.ext.mockitojupiter
+	testImplementation project.ext.h2
+	testImplementation project.ext.springboottest
+	testImplementation project.ext.archunit
+	implementation project.ext.springbootweb
+	implementation project.ext.springdoc
+
+	implementation project.ext.apachecommons
+	implementation project.ext.springbootjdbc
+	runtimeOnly 'org.postgresql:postgresql:42.7.4'
+	testImplementation project.ext.flyway
+	testImplementation project.ext.flywaytest
+
+	implementation project.ext.springbootvalidation
+
+	implementation project(':dominio')
+	implementation project(':aplicacion')
+
+
+	implementation project(':comun:comun-infraestructura')
+	implementation project(':comun:comun-aplicacion')
+	implementation project(':comun:comun-dominio')
+
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+	}
+	additionalSourceDirs files("../aplicacion/src/main/java")
+	additionalClassDirs files("../aplicacion/build/classes/java/main")
+}
+
+pitest {
+	junit5PluginVersion = "1.2.1"
+	testSourceSets = [sourceSets.test]
+	mainSourceSets = [sourceSets.main]
+	useClasspathFile = true
+	mutationThreshold = 90
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+//Plantilla para hacer las demas tablas de doctor y citas
+/*sourceSets {
+    main {
+        java {
+            exclude 'ceiba/com/co/factura/**'
+            exclude 'ceiba/com/co/producto/**'
+            exclude 'ceiba/com/co/cliente/**'
+        }
+    }
+    test {
+        java {
+            exclude 'ceiba/com/co/factura/**'
+            exclude 'ceiba/com/co/producto/**'
+            exclude 'ceiba/com/co/cliente/**'
+        }
+    }
+}*/
