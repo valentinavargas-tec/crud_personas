@@ -20,7 +20,7 @@ import ceiba.com.co.excepcion.ExcepcionValorObligatorio;
 
 @ControllerAdvice
 public class ManejadorError extends ResponseEntityExceptionHandler {
-    
+
     private static final Logger LOGGER_ERROR = LoggerFactory.getLogger(ManejadorError.class);
 
     private static final String OCURRIO_UN_ERROR_FAVOR_CONTACTAR_AL_ADMINISTRADOR = "OcurriÃ³ un error favor contactar al administrador.";
@@ -34,30 +34,29 @@ public class ManejadorError extends ResponseEntityExceptionHandler {
         CODIGOS_ESTADO.put(ExcepcionValorObligatorio.class.getSimpleName(), HttpStatus.BAD_REQUEST.value());
         CODIGOS_ESTADO.put(ExcepcionDuplicidad.class.getSimpleName(), HttpStatus.BAD_REQUEST.value());
         CODIGOS_ESTADO.put(ExcepcionTecnica.class.getSimpleName(), HttpStatus.INTERNAL_SERVER_ERROR.value());
- 
-        //en caso de tener otra excepcion matricularla aca
+        CODIGOS_ESTADO.put(IllegalArgumentException.class.getSimpleName(), HttpStatus.BAD_REQUEST.value());
+        CODIGOS_ESTADO.put(IllegalArgumentException.class.getSimpleName(), HttpStatus.BAD_REQUEST.value());
+
     }
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Error> handleAllExceptions(Exception exception) {
-        ResponseEntity<Error> resultado;
+    public final ResponseEntity<ErrorRespuesta> handleAllExceptions(Exception exception) {
+        ResponseEntity<ErrorRespuesta> resultado;
 
         String excepcionNombre = exception.getClass().getSimpleName();
         String mensaje = exception.getMessage();
         Integer codigo = CODIGOS_ESTADO.get(excepcionNombre);
 
         if (codigo != null) {
-            Error error = new Error(excepcionNombre, mensaje);
+            ErrorRespuesta error = new ErrorRespuesta(excepcionNombre, mensaje);
             resultado = new ResponseEntity<>(error, HttpStatus.valueOf(codigo));
         } else {
             LOGGER_ERROR.error(excepcionNombre, exception);
-            Error error = new Error(excepcionNombre, OCURRIO_UN_ERROR_FAVOR_CONTACTAR_AL_ADMINISTRADOR);
+            ErrorRespuesta error = new ErrorRespuesta(excepcionNombre, OCURRIO_UN_ERROR_FAVOR_CONTACTAR_AL_ADMINISTRADOR);
             resultado = new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return resultado;
     }
-    
-    
-    
+
 }

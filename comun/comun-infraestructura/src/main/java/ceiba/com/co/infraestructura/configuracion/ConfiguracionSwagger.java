@@ -22,12 +22,12 @@ public class ConfiguracionSwagger {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("API de Gestión de Personas")
+                        .title("API de Gestión de Pacientes")
                         .version("v1.0.0")
                         .description("""
                                 ### Documentación Oficial de la API REST
                                 
-                                Esta API provee los servicios necesarios para la administración integral del ciclo de vida de las **Personas** dentro de la plataforma.
+                                Esta API provee los servicios necesarios para la administración integral del ciclo de vida de las **Pacientes** dentro de la plataforma.
                                 
                                 #### Arquitectura y Patrones
                                 - **Arquitectura Hexagonal**: Fuerte separación entre el Dominio, la Aplicación y la Infraestructura.
@@ -40,13 +40,13 @@ public class ConfiguracionSwagger {
     }
 
     @Bean
-    public OpenApiCustomizer personalizarSchemasOpenApi() {
+    public OpenApiCustomizer pacientelizarSchemasOpenApi() {
         return openApi -> {
             if (openApi.getComponents() == null || openApi.getComponents().getSchemas() == null) {
                 return;
             }
 
-            Schema<?> comandoActualizarSchema = openApi.getComponents().getSchemas().get("ComandoActualizarPersona");
+            Schema<?> comandoActualizarSchema = openApi.getComponents().getSchemas().get("ComandoActualizarPaciente");
             if (comandoActualizarSchema != null) {
                 comandoActualizarSchema.setRequired(List.of("nombre", "apellido", "email", "fechaNacimiento"));
                 enriquecerPropiedad(comandoActualizarSchema, "nombre", "Nombre(s) a actualizar", "Carlos Alberto");
@@ -62,39 +62,39 @@ public class ConfiguracionSwagger {
                 enriquecerPropiedad(comandoActualizarSchema, "fechaNacimiento", "Fecha de nacimiento (YYYY-MM-DD)", "1990-05-15");
             }
 
-            Schema<?> personaDtoSchema = openApi.getComponents().getSchemas().get("PersonaDTO");
-            if (personaDtoSchema != null) {
-                personaDtoSchema.setRequired(List.of("cedula", "nombre", "apellido", "email"));
+            Schema<?> pacienteDtoSchema = openApi.getComponents().getSchemas().get("PacienteDTO");
+            if (pacienteDtoSchema != null) {
+                pacienteDtoSchema.setRequired(List.of("cedula", "nombre", "apellido", "email"));
 
-                enriquecerPropiedad(personaDtoSchema, "cedula", "Número de cédula de ciudadanía", 1017123456);
-                enriquecerPropiedad(personaDtoSchema, "nombre", "Nombre(s) de la persona", "Carlos");
-                enriquecerPropiedad(personaDtoSchema, "apellido", "Apellido(s) de la persona", "Pérez");
+                enriquecerPropiedad(pacienteDtoSchema, "cedula", "Número de cédula de ciudadanía", 1017123456);
+                enriquecerPropiedad(pacienteDtoSchema, "nombre", "Nombre(s) de la paciente", "Carlos");
+                enriquecerPropiedad(pacienteDtoSchema, "apellido", "Apellido(s) de la paciente", "Pérez");
 
-                Schema<?> emailProp = (Schema<?>) personaDtoSchema.getProperties().get("email");
+                Schema<?> emailProp = (Schema<?>) pacienteDtoSchema.getProperties().get("email");
                 if (emailProp != null) {
-                    emailProp.setDescription("Correo electrónico institucional o personal");
+                    emailProp.setDescription("Correo electrónico institucional o pacientel");
                     emailProp.setExample("carlos.perez@example.com");
                     emailProp.setFormat("email");
                 }
 
-                enriquecerPropiedad(personaDtoSchema, "fechaNacimiento", "Fecha de nacimiento (YYYY-MM-DD)", "1990-05-15");
+                enriquecerPropiedad(pacienteDtoSchema, "fechaNacimiento", "Fecha de nacimiento (YYYY-MM-DD)", "1990-05-15");
             }
 
-            Schema<?> comandoPersonaSchema = openApi.getComponents().getSchemas().get("ComandoPersona");
-            if (comandoPersonaSchema != null) {
-                comandoPersonaSchema.setRequired(List.of("cedula", "nombre", "apellido", "email", "fechaNacimiento"));
-                enriquecerPropiedad(comandoPersonaSchema, "cedula", "Número de cédula único para registro", 1017123456);
-                enriquecerPropiedad(comandoPersonaSchema, "nombre", "Nombre(s) de la persona", "Carlos");
-                enriquecerPropiedad(comandoPersonaSchema, "apellido", "Apellido(s) de la persona", "Pérez");
+            Schema<?> comandoPacienteSchema = openApi.getComponents().getSchemas().get("ComandoPaciente");
+            if (comandoPacienteSchema != null) {
+                comandoPacienteSchema.setRequired(List.of("cedula", "nombre", "apellido", "email", "fechaNacimiento"));
+                enriquecerPropiedad(comandoPacienteSchema, "cedula", "Número de cédula único para registro", 1017123456);
+                enriquecerPropiedad(comandoPacienteSchema, "nombre", "Nombre(s) de la paciente", "Carlos");
+                enriquecerPropiedad(comandoPacienteSchema, "apellido", "Apellido(s) de la paciente", "Pérez");
 
-                Schema<?> emailProp = (Schema<?>) comandoPersonaSchema.getProperties().get("email");
+                Schema<?> emailProp = (Schema<?>) comandoPacienteSchema.getProperties().get("email");
                 if (emailProp != null) {
-                    emailProp.setDescription("Correo electrónico institucional o personal");
+                    emailProp.setDescription("Correo electrónico institucional o pacientel");
                     emailProp.setExample("carlos.perez@example.com");
                     emailProp.setFormat("email");
                 }
 
-                enriquecerPropiedad(comandoPersonaSchema, "fechaNacimiento", "Fecha de nacimiento (YYYY-MM-DD)", "1990-05-15");
+                enriquecerPropiedad(comandoPacienteSchema, "fechaNacimiento", "Fecha de nacimiento (YYYY-MM-DD)", "1990-05-15");
             }
 
             Schema<?> problemDetailSchema = openApi.getComponents().getSchemas().get("ProblemDetail");
@@ -102,8 +102,8 @@ public class ConfiguracionSwagger {
                 enriquecerPropiedad(problemDetailSchema, "type", "URI que identifica el tipo de error", "about:blank");
                 enriquecerPropiedad(problemDetailSchema, "title", "Resumen corto del error", "ExcepcionDuplicidad");
                 enriquecerPropiedad(problemDetailSchema, "status", "Código de estado HTTP", 400);
-                enriquecerPropiedad(problemDetailSchema, "detail", "Explicación detallada del error específico", "La persona con cédula ya existe");
-                enriquecerPropiedad(problemDetailSchema, "instance", "URI del endpoint donde ocurrió el error", "/api/personas");
+                enriquecerPropiedad(problemDetailSchema, "detail", "Explicación detallada del error específico", "La paciente con cédula ya existe");
+                enriquecerPropiedad(problemDetailSchema, "instance", "URI del endpoint donde ocurrió el error", "/api/pacientes");
             }
 
             Schema<?> paginaSchema = openApi.getComponents().getSchemas().get("Pagina");
@@ -115,9 +115,9 @@ public class ConfiguracionSwagger {
 
                 Schema<?> contenidoProp = (Schema<?>) paginaSchema.getProperties().get("contenido");
                 if (contenidoProp != null) {
-                    contenidoProp.setDescription("Lista de personas registradas en la página actual");
-                    Schema<?> personaRefSchema = new Schema<>().$ref("#/components/schemas/PersonaDTO");
-                    contenidoProp.setItems(personaRefSchema);
+                    contenidoProp.setDescription("Lista de pacientes registradas en la página actual");
+                    Schema<?> pacienteRefSchema = new Schema<>().$ref("#/components/schemas/PacienteDTO");
+                    contenidoProp.setItems(pacienteRefSchema);
                 }
             }
 

@@ -1,3 +1,5 @@
+DELETE FROM pacientes;
+
 insert into pacientes(numero_documento, tipo_documento, nombre, apellido, fecha_nacimiento, telefono, correo_electronico, eps, genero) 
 values(123456789, 'CC', 'Juan', 'Perez', '1990-05-15', '3001234567', 'juan.perez@gmail.com', 'Sura', 'MASCULINO');
 

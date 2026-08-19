@@ -4,7 +4,7 @@ jasypt:
       algorithm: PBEWithMD5AndDES
 
 server:
-   port: 8083
+   port: 8084
    servlet:
       context-path: /
       session:
@@ -16,11 +16,12 @@ spring:
    datasource:
       driver-class-name: org.postgresql.Driver
       type: com.zaxxer.hikari.HikariDataSource
-      jdbcUrl: jdbc:postgresql://localhost:5432/crud_personas
+      jdbcUrl: jdbc:postgresql://localhost:5432/gestion_citas_db
       username: postgres
       password: 1303
       hikari:
          poolName: pool
    flyway:
       baseline-on-migrate: true
+      clean-on-validation-error: true
 
