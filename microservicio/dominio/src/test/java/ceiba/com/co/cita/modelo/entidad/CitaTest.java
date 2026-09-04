@@ -135,4 +135,86 @@ class CitaTest {
 
         assertThrows(ceiba.com.co.excepcion.ExcepcionReglaNegocio.class, cita::completar);
     }
+
+    @Test
+    @DisplayName("Debería reprogramar cita exitosamente cuando estado es PROGRAMADA y fecha es futura")
+    void deberiaReprogramarCita_CuandoDatosValidos() {
+        Cita cita = Cita.builder()
+                .conPacienteDocumento("123456789")
+                .conDoctorDocumento("DOC-001")
+                .conFechaHora(FECHA_FUTURA)
+                .conTipoCita(TipoCita.CONSULTA_GENERAL)
+                .conMotivo("Chequeo")
+                .build();
+
+        LocalDateTime nuevaFecha = FECHA_FUTURA.plusDays(3);
+        cita.reprogramar(nuevaFecha, TipoCita.ESPECIALIZADA, "Cambio por viaje");
+
+        assertEquals(nuevaFecha, cita.getFechaHora());
+        assertEquals(TipoCita.ESPECIALIZADA, cita.getTipoCita());
+        assertEquals("Cambio por viaje", cita.getMotivo());
+        assertEquals(EstadoCita.PROGRAMADA, cita.getEstado());
+    }
+
+    @Test
+    @DisplayName("Debería lanzar ExcepcionValorInvalido (Regla 6) al reprogramar con fecha pasada")
+    void deberiaLanzarExcepcion_AlReprogramarConFechaPasada() {
+        Cita cita = Cita.builder()
+                .conPacienteDocumento("123456789")
+                .conDoctorDocumento("DOC-001")
+                .conFechaHora(FECHA_FUTURA)
+                .conTipoCita(TipoCita.CONSULTA_GENERAL)
+                .build();
+
+        assertThrows(ExcepcionValorInvalido.class, () ->
+                cita.reprogramar(FECHA_PASADA, TipoCita.CONTROL, "Nuevo motivo"));
+    }
+
+    @Test
+    @DisplayName("Debería lanzar ExcepcionReglaNegocio al reprogramar cita que no está PROGRAMADA")
+    void deberiaLanzarExcepcion_AlReprogramarCitaNoProgramada() {
+        Cita cita = Cita.builder()
+                .conPacienteDocumento("123456789")
+                .conDoctorDocumento("DOC-001")
+                .conFechaHora(FECHA_FUTURA)
+                .conTipoCita(TipoCita.CONSULTA_GENERAL)
+                .build();
+
+        cita.cancelar("Ya no deseo asistir");
+
+        assertThrows(ceiba.com.co.excepcion.ExcepcionReglaNegocio.class, () ->
+                cita.reprogramar(FECHA_FUTURA.plusDays(2), TipoCita.CONTROL, "Intento"));
+    }
+
+    @Test
+    @DisplayName("Debería cancelar cita sin motivo y lanzar excepción si se intenta cancelar dos veces")
+    void deberiaCancelarCitaSinMotivo_YLanzarExcepcionAlCancelarDosVeces() {
+        Cita cita = Cita.builder()
+                .conPacienteDocumento("123456789")
+                .conDoctorDocumento("DOC-001")
+                .conFechaHora(FECHA_FUTURA)
+                .conTipoCita(TipoCita.CONSULTA_GENERAL)
+                .build();
+
+        cita.cancelar();
+        assertEquals(EstadoCita.CANCELADA, cita.getEstado());
+
+        assertThrows(ceiba.com.co.excepcion.ExcepcionReglaNegocio.class, cita::cancelar);
+    }
+
+    @Test
+    @DisplayName("Debería reasignar doctor manteniendo la misma fechaHora original")
+    void deberiaReasignarDoctor_ManteniendoMismaFechaHora() {
+        Cita cita = Cita.builder()
+                .conPacienteDocumento("123456789")
+                .conDoctorDocumento("DOC-001")
+                .conFechaHora(FECHA_FUTURA)
+                .conTipoCita(TipoCita.CONSULTA_GENERAL)
+                .build();
+
+        cita.reasignar("DOC-002");
+        assertEquals(EstadoCita.REASIGNADA, cita.getEstado());
+        assertEquals("DOC-002", cita.getDoctorDocumento());
+        assertEquals(FECHA_FUTURA, cita.getFechaHora());
+    }
 }

@@ -170,6 +170,75 @@
               ]
             }
           }
+        },
+        {
+          "name": "3.6 Reprogramar Cita (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fechaHora\": \"2026-10-16T11:00:00\",\n  \"tipoCita\": \"CONTROL\",\n  \"motivo\": \"Reprogramación por chequeo post-operatorio\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8084/api/citas/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "citas", "1"]
+            }
+          }
+        },
+        {
+          "name": "3.7 Cancelar Cita (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"Cancelación por calamidad doméstica\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8084/api/citas/1/cancelar",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "citas", "1", "cancelar"]
+            }
+          }
+        },
+        {
+          "name": "3.8 Reasignar Cita a Doctor (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nuevoDoctorDocumento\": \"79123456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8084/api/citas/1/reasignar",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "citas", "1", "reasignar"]
+            }
+          }
         }
       ]
     }

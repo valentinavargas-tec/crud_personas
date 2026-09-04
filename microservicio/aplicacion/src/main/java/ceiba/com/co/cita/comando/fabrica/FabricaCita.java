@@ -18,7 +18,7 @@ public class FabricaCita {
                 .build();
     }
 
-    private TipoCita parsearTipoCita(String tipoCitaStr) {
+    public TipoCita parsearTipoCita(String tipoCitaStr) {
         if (tipoCitaStr == null || tipoCitaStr.isBlank()) {
             throw new ceiba.com.co.excepcion.ExcepcionValorObligatorio("El tipo de cita es obligatorio");
         }

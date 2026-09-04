@@ -1,6 +1,7 @@
 package ceiba.com.co.cita.modelo.entidad;
 
 import ceiba.com.co.ValidadorArgumento;
+import ceiba.com.co.excepcion.ExcepcionReglaNegocio;
 import ceiba.com.co.excepcion.ExcepcionValorInvalido;
 
 import java.time.LocalDateTime;
@@ -11,14 +12,15 @@ public class Cita {
     private static final String FECHA_DEBE_SER_FUTURA = "La fecha y hora de la cita médica debe ser una fecha futura";
     private static final String CANCELACION_INVALIDA = "No es posible cancelar la cita médica porque la hora programada ya transcurrió o la cita no se encuentra en estado programado.";
     private static final String TRANSICION_INVALIDA = "No se permite la transición de estado de %s a %s.";
+    private static final String REPROGRAMACION_INVALIDA_ESTADO = "Solo se pueden reprogramar citas médicas en estado PROGRAMADA.";
 
     private final Long id;
     private final String pacienteDocumento;
     private String doctorDocumento;
     private LocalDateTime fechaHora;
-    private final TipoCita tipoCita;
+    private TipoCita tipoCita;
     private EstadoCita estado;
-    private final String motivo;
+    private String motivo;
     private String observaciones;
 
     private Cita(Builder builder) {
@@ -46,30 +48,63 @@ public class Cita {
         }
     }
 
+    public void reprogramar(LocalDateTime nuevaFechaHora, TipoCita nuevoTipoCita, String nuevoMotivo) {
+        if (!EstadoCita.PROGRAMADA.equals(this.estado) && !EstadoCita.REASIGNADA.equals(this.estado)) {
+            throw new ExcepcionReglaNegocio(REPROGRAMACION_INVALIDA_ESTADO);
+        }
+        ValidadorArgumento.validarObligatorio(nuevaFechaHora, FECHA_HORA_OBLIGATORIA);
+        validarFechaFutura(nuevaFechaHora);
+        this.fechaHora = nuevaFechaHora;
+        if (nuevoTipoCita != null) {
+            this.tipoCita = nuevoTipoCita;
+        }
+        if (nuevoMotivo != null && !nuevoMotivo.isBlank()) {
+            this.motivo = nuevoMotivo;
+        }
+    }
+
+    public void cancelar() {
+        cancelar(null);
+    }
+
     public void cancelar(String motivoCancelacion) {
-        if (!EstadoCita.PROGRAMADA.equals(this.estado) || LocalDateTime.now().isAfter(this.fechaHora)) {
-            throw new ceiba.com.co.excepcion.ExcepcionReglaNegocio(CANCELACION_INVALIDA);
+        if ((!EstadoCita.PROGRAMADA.equals(this.estado) && !EstadoCita.REASIGNADA.equals(this.estado))
+                || LocalDateTime.now().isAfter(this.fechaHora)) {
+            throw new ExcepcionReglaNegocio(CANCELACION_INVALIDA);
         }
         this.estado = EstadoCita.CANCELADA;
-        this.observaciones = (this.observaciones == null ? "" : this.observaciones + " | ") + "Cancelada: " + motivoCancelacion;
+        if (motivoCancelacion != null && !motivoCancelacion.isBlank()) {
+            this.observaciones = (this.observaciones == null || this.observaciones.isBlank())
+                    ? "Cancelada: " + motivoCancelacion
+                    : this.observaciones + " | Cancelada: " + motivoCancelacion;
+        }
+    }
+
+    public void reasignar(String nuevoDoctorDocumento) {
+        reasignar(nuevoDoctorDocumento, null);
     }
 
     public void reasignar(String nuevoDoctorDocumento, LocalDateTime nuevaFechaHora) {
-        if (!EstadoCita.PROGRAMADA.equals(this.estado)) {
-            throw new ceiba.com.co.excepcion.ExcepcionReglaNegocio(String.format(TRANSICION_INVALIDA, this.estado, EstadoCita.REASIGNADA));
+        if (!EstadoCita.PROGRAMADA.equals(this.estado) && !EstadoCita.REASIGNADA.equals(this.estado)) {
+            throw new ExcepcionReglaNegocio(String.format(TRANSICION_INVALIDA, this.estado, EstadoCita.REASIGNADA));
         }
         ValidadorArgumento.validarObligatorio(nuevoDoctorDocumento, "El documento del doctor es obligatorio");
         if (nuevaFechaHora != null) {
             validarFechaFutura(nuevaFechaHora);
             this.fechaHora = nuevaFechaHora;
+        } else if (this.fechaHora.isBefore(LocalDateTime.now())) {
+            throw new ExcepcionReglaNegocio("No es posible reasignar la cita médica porque la fecha y hora programada ya transcurrió.");
         }
         this.doctorDocumento = nuevoDoctorDocumento;
         this.estado = EstadoCita.REASIGNADA;
+        this.observaciones = (this.observaciones == null || this.observaciones.isBlank())
+                ? "Reasignada a doctor: " + nuevoDoctorDocumento
+                : this.observaciones + " | Reasignada a doctor: " + nuevoDoctorDocumento;
     }
 
     public void iniciarAtencion() {
-        if (!EstadoCita.PROGRAMADA.equals(this.estado)) {
-            throw new ceiba.com.co.excepcion.ExcepcionReglaNegocio(String.format(TRANSICION_INVALIDA, this.estado, EstadoCita.EN_ATENCION));
+        if (!EstadoCita.PROGRAMADA.equals(this.estado) && !EstadoCita.REASIGNADA.equals(this.estado)) {
+            throw new ExcepcionReglaNegocio(String.format(TRANSICION_INVALIDA, this.estado, EstadoCita.EN_ATENCION));
         }
         this.estado = EstadoCita.EN_ATENCION;
     }
