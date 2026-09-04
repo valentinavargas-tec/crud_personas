@@ -2,6 +2,7 @@ package ceiba.com.co.paciente.servicio;
 
 import ceiba.com.co.excepcion.ExcepcionDuplicidad;
 import ceiba.com.co.excepcion.ExcepcionSinDatos;
+import ceiba.com.co.paciente.modelo.dto.DatosActualizarPaciente;
 import ceiba.com.co.paciente.modelo.entidad.Paciente;
 import ceiba.com.co.paciente.modelo.entidad.Genero;
 import ceiba.com.co.paciente.puerto.repositorio.RepositorioPaciente;
@@ -15,18 +16,28 @@ public class ServicioActualizarPaciente {
         this.repositorioPaciente = repositorioPaciente;
     }
 
-    public void ejecutar(Long numeroDocumento, String nombre, String apellido, LocalDate fechaNacimiento, String telefono, String correoElectronico, String eps, Genero genero) {
-        Paciente pacienteExistente = this.repositorioPaciente.obtener(numeroDocumento);
-        if (pacienteExistente == null) {
-            throw new ExcepcionSinDatos("No existe el paciente que desea actualizar");
+    public void ejecutar(Long numeroDocumento, DatosActualizarPaciente datos) {
+        Paciente pacienteExistente = this.repositorioPaciente.obtener(numeroDocumento)
+                .orElseThrow(() -> new ExcepcionSinDatos("No existe el paciente que desea actualizar"));
+
+        if (!pacienteExistente.getCorreoElectronico().equalsIgnoreCase(datos.correoElectronico()) && 
+            this.repositorioPaciente.existeConCorreoElectronico(datos.correoElectronico())) {
+            throw new ExcepcionDuplicidad("El correo electrónico ya está registrado: " + datos.correoElectronico());
         }
 
-        if (!pacienteExistente.getCorreoElectronico().equals(correoElectronico) && 
-            this.repositorioPaciente.existeConCorreoElectronico(correoElectronico)) {
-            throw new ExcepcionDuplicidad("El correo electrónico ya está registrado: " + correoElectronico);
-        }
-
-        Paciente pacienteActualizado = pacienteExistente.actualizarDatos(nombre, apellido, fechaNacimiento, telefono, correoElectronico, eps, genero);
+        Paciente pacienteActualizado = pacienteExistente.actualizarDatos(
+                datos.nombre(),
+                datos.apellido(),
+                datos.fechaNacimiento(),
+                datos.telefono(),
+                datos.correoElectronico(),
+                datos.eps(),
+                datos.genero()
+        );
         this.repositorioPaciente.actualizar(pacienteActualizado);
+    }
+
+    public void ejecutar(Long numeroDocumento, String nombre, String apellido, LocalDate fechaNacimiento, String telefono, String correoElectronico, String eps, Genero genero) {
+        ejecutar(numeroDocumento, new DatosActualizarPaciente(nombre, apellido, fechaNacimiento, telefono, correoElectronico, eps, genero));
     }
 }

@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,7 +41,7 @@ public class ServicioActualizarPacienteTest {
         Long numeroDocumento = pacienteExistente.getNumeroDocumento();
         String nuevoCorreoElectronico = "nuevo_email@example.com";
 
-        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(pacienteExistente);
+        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(Optional.of(pacienteExistente));
         when(repositorioPaciente.existeConCorreoElectronico(nuevoCorreoElectronico)).thenReturn(false);
 
         // Act
@@ -58,7 +59,7 @@ public class ServicioActualizarPacienteTest {
         Paciente pacienteExistente = PacienteTestDataBuilder.unPacienteValida().build();
         Long numeroDocumento = pacienteExistente.getNumeroDocumento();
 
-        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(pacienteExistente);
+        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(Optional.of(pacienteExistente));
 
         // Act
         servicioActualizarPaciente.ejecutar(numeroDocumento, "NuevoNombre", "NuevoApellido", LocalDate.of(1995, 1, 1), pacienteExistente.getTelefono(), pacienteExistente.getCorreoElectronico(), pacienteExistente.getEps(), pacienteExistente.getGenero());
@@ -73,7 +74,7 @@ public class ServicioActualizarPacienteTest {
     void deberia_LanzarExcepcionSinDatos_Cuando_PacienteNoExiste() {
         // Arrange
         Long numeroDocumento = 999L;
-        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(null);
+        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(Optional.empty());
 
         // Act & Assert
         ExcepcionSinDatos excepcion = assertThrows(
@@ -93,7 +94,7 @@ public class ServicioActualizarPacienteTest {
         Long numeroDocumento = pacienteExistente.getNumeroDocumento();
         String emailDuplicado = "duplicado@example.com";
 
-        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(pacienteExistente);
+        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(Optional.of(pacienteExistente));
         when(repositorioPaciente.existeConCorreoElectronico(emailDuplicado)).thenReturn(true);
 
         // Act & Assert
@@ -114,7 +115,7 @@ public class ServicioActualizarPacienteTest {
         Paciente pacienteExistente = PacienteTestDataBuilder.unPacienteValida().build();
         Long numeroDocumento = pacienteExistente.getNumeroDocumento();
 
-        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(pacienteExistente);
+        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(Optional.of(pacienteExistente));
 
         // Act & Assert
         assertThrows(ExcepcionValorObligatorio.class,
@@ -129,7 +130,7 @@ public class ServicioActualizarPacienteTest {
         Paciente pacienteExistente = PacienteTestDataBuilder.unPacienteValida().build();
         Long numeroDocumento = pacienteExistente.getNumeroDocumento();
 
-        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(pacienteExistente);
+        when(repositorioPaciente.obtener(numeroDocumento)).thenReturn(Optional.of(pacienteExistente));
 
         // Act & Assert
         assertThrows(ExcepcionValorInvalido.class,

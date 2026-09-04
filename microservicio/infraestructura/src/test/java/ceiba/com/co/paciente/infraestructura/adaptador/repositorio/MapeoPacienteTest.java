@@ -1,4 +1,4 @@
-package ceiba.com.co.infraestructura.adaptador.repositorio;
+package ceiba.com.co.paciente.infraestructura.adaptador.repositorio;
 
 import ceiba.com.co.paciente.adaptador.repositorio.MapeoPaciente;
 import ceiba.com.co.paciente.modelo.entidad.Paciente;

@@ -8,7 +8,6 @@ import ceiba.com.co.paciente.comando.manejador.ManejadorActualizarPaciente;
 import ceiba.com.co.paciente.comando.manejador.ManejadorCrearPaciente;
 import ceiba.com.co.paciente.comando.manejador.ManejadorEliminarPaciente;
 import ceiba.com.co.paciente.controlador.doc.ComandoControladorPacienteApiDoc;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

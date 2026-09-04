@@ -54,14 +54,14 @@ class ComandoControladorPacienteTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.valor", is(111222333)));
 
-        var pacienteGuardada = repositorioPaciente.obtener(111222333L);
+        var pacienteGuardada = repositorioPaciente.obtener(111222333L).orElse(null);
         Assertions.assertNotNull(pacienteGuardada);
         Assertions.assertEquals("Carlos", pacienteGuardada.getNombre());
         Assertions.assertEquals("Perez", pacienteGuardada.getApellido());
     }
 
     @Test
-    void deberia_Retornar400_Cuando_CedulaEstaDuplicada() throws Exception {
+    void deberia_Retornar409_Cuando_CedulaEstaDuplicada() throws Exception {
         // Arrange
         var comando = ComandoPacienteTestDataBuilder.unComandoPacienteValido()
                 .conNumeroDocumento(123456789L)
@@ -75,12 +75,12 @@ class ComandoControladorPacienteTest {
         mockMvc.perform(post("/api/pacientes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(comando)))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.nombreExcepcion", is("ExcepcionDuplicidad")));
     }
 
     @Test
-    void deberia_Retornar400_Cuando_EmailEstaDuplicado() throws Exception {
+    void deberia_Retornar409_Cuando_EmailEstaDuplicado() throws Exception {
         // Arrange
         var comando = ComandoPacienteTestDataBuilder.unComandoPacienteValido()
                 .conNumeroDocumento(999000111L)
@@ -94,7 +94,7 @@ class ComandoControladorPacienteTest {
         mockMvc.perform(post("/api/pacientes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(comando)))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.nombreExcepcion", is("ExcepcionDuplicidad")));
     }
 
@@ -135,7 +135,8 @@ class ComandoControladorPacienteTest {
                 .andExpect(jsonPath("$.valor", is(123456789)));
 
         // Assert
-        var pacienteActualizada = repositorioPaciente.obtener(123456789L);
+        var pacienteActualizada = repositorioPaciente.obtener(123456789L).orElse(null);
+        Assertions.assertNotNull(pacienteActualizada);
         Assertions.assertEquals("Juan Actualizado", pacienteActualizada.getNombre());
     }
 
@@ -159,7 +160,7 @@ class ComandoControladorPacienteTest {
     }
 
     @Test
-    void deberia_Retornar400_Cuando_ActualizaConEmailDuplicado() throws Exception {
+    void deberia_Retornar409_Cuando_ActualizaConEmailDuplicado() throws Exception {
         // Arrange
         var comandoUpdate = ComandoPacienteTestDataBuilder.unComandoPacienteValido()
                 .conNumeroDocumento(123456789L)
@@ -173,7 +174,7 @@ class ComandoControladorPacienteTest {
         mockMvc.perform(put("/api/pacientes/123456789")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(comandoUpdate)))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.nombreExcepcion", is("ExcepcionDuplicidad")));
     }
 

@@ -1,4 +1,4 @@
-package ceiba.com.co.error;
+package ceiba.com.co.paciente.error;
 
 import ceiba.com.co.excepcion.ExcepcionDuplicidad;
 import ceiba.com.co.excepcion.ExcepcionLongitudValor;
@@ -26,7 +26,7 @@ class ManejadorErrorTest {
     }
 
     @Test
-    void deberia_Retornar400_Cuando_ExcepcionDuplicidadEsLanzada() {
+    void deberia_Retornar409_Cuando_ExcepcionDuplicidadEsLanzada() {
         // Arrange
         ExcepcionDuplicidad excepcion = new ExcepcionDuplicidad("La paciente ya existe");
 
@@ -37,7 +37,7 @@ class ManejadorErrorTest {
         // Assert
         assertNotNull(respuesta);
         assertNotNull(error);
-        assertEquals(HttpStatus.BAD_REQUEST, respuesta.getStatusCode());
+        assertEquals(HttpStatus.CONFLICT, respuesta.getStatusCode());
         assertEquals("ExcepcionDuplicidad", error.getNombreExcepcion());
         assertEquals("La paciente ya existe", error.getMensaje());
     }

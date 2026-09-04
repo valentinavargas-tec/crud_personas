@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS citas (
+    id                  BIGSERIAL NOT NULL,
+    paciente_documento  BIGINT NOT NULL,
+    doctor_documento    VARCHAR(50) NOT NULL,
+    fecha_hora          TIMESTAMP NOT NULL,
+    tipo_cita           VARCHAR(30) NOT NULL,
+    estado              VARCHAR(20) NOT NULL DEFAULT 'PROGRAMADA',
+    motivo              VARCHAR(500) NULL,
+    observaciones       VARCHAR(1000) NULL,
+    PRIMARY KEY (id)
+);

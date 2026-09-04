@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Tag(name = "Pacientes", description = "Endpoints para la administración y consulta integral de Pacientes")
-@SuppressWarnings("unused")
 public interface ConsultaControladorPacienteApiDoc {
 
     @Operation(

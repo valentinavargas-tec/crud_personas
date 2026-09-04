@@ -12,7 +12,13 @@ import javax.sql.DataSource;
 import java.io.IOException;
 
 
+import org.springframework.context.annotation.Import;
+import ceiba.com.co.paciente.configuracion.BeanServicio;
+import ceiba.com.co.doctor.configuracion.BeanServicioDoctor;
+import ceiba.com.co.cita.configuracion.BeanServicioCita;
+
 @ComponentScan("ceiba.com.co")
+@Import({BeanServicio.class, BeanServicioDoctor.class, BeanServicioCita.class})
 public class ApplicationMock {
 	
 

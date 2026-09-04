@@ -23,5 +23,6 @@ spring:
          poolName: pool
    flyway:
       baseline-on-migrate: true
-      clean-on-validation-error: true
+      clean-on-validation-error: false
+      clean-disabled: true
 

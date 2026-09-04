@@ -3,14 +3,16 @@ package ceiba.com.co.paciente.comando.manejador;
 import ceiba.com.co.paciente.comando.ComandoActualizarPaciente;
 import ceiba.com.co.paciente.comando.ComandoActualizarPacienteTestDataBuilder;
 import ceiba.com.co.excepcion.ExcepcionSinDatos;
-import ceiba.com.co.paciente.modelo.entidad.Genero;
+import ceiba.com.co.paciente.modelo.dto.DatosActualizarPaciente;
 import ceiba.com.co.paciente.servicio.ServicioActualizarPaciente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -41,16 +43,12 @@ class ManejadorActualizarPacienteTest {
         manejadorActualizarPaciente.ejecutar(numeroDocumento, comando);
 
         // Assert
-        verify(servicioActualizarPaciente, times(1)).ejecutar(
-                eq(numeroDocumento),
-                eq("Laura"),
-                eq("Torres"),
-                eq(LocalDate.of(1998, 7, 20)),
-                any(),
-                eq("laura@gmail.com"),
-                any(),
-                any(Genero.class)
-        );
+        ArgumentCaptor<DatosActualizarPaciente> captor = ArgumentCaptor.forClass(DatosActualizarPaciente.class);
+        verify(servicioActualizarPaciente, times(1)).ejecutar(eq(numeroDocumento), captor.capture());
+        assertEquals("Laura", captor.getValue().nombre());
+        assertEquals("Torres", captor.getValue().apellido());
+        assertEquals("laura@gmail.com", captor.getValue().correoElectronico());
+        assertEquals(LocalDate.of(1998, 7, 20), captor.getValue().fechaNacimiento());
     }
 
     @Test
@@ -65,10 +63,10 @@ class ManejadorActualizarPacienteTest {
 
         doThrow(new ExcepcionSinDatos("No existe el paciente que desea actualizar"))
                 .when(servicioActualizarPaciente)
-                .ejecutar(eq(numeroDocumento), any(), any(), any(), any(), any(), any(), any());
+                .ejecutar(eq(numeroDocumento), any(DatosActualizarPaciente.class));
 
         // Act & Assert
         assertThrows(ExcepcionSinDatos.class, () -> manejadorActualizarPaciente.ejecutar(numeroDocumento, comando));
-        verify(servicioActualizarPaciente, times(1)).ejecutar(eq(numeroDocumento), any(), any(), any(), any(), any(), any(), any());
+        verify(servicioActualizarPaciente, times(1)).ejecutar(eq(numeroDocumento), any(DatosActualizarPaciente.class));
     }
 }

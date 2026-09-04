@@ -23,14 +23,3 @@ dependencies {
 	testImplementation project.ext.mockitocore
 	testImplementation project.ext.mockitojupiter
 }
-
-//plantilla para guiarme para hacer las demas tablas de doctor y citas
-/*sourceSets {
-    main {
-        java {
-            exclude 'ceiba/com/co/factura/**'
-            exclude 'ceiba/com/co/producto/**'
-            exclude 'ceiba/com/co/cliente/**'
-        }
-    }
-}*/

@@ -1,4 +1,4 @@
-package ceiba.com.co.infraestructura.controlador;
+package ceiba.com.co.paciente.infraestructura.controlador;
 
 import ceiba.com.co.ApplicationMock;
 import ceiba.com.co.paciente.controlador.ConsultaControladorPaciente;

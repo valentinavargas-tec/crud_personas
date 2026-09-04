@@ -55,12 +55,13 @@ public class RepositorioPacientePostgres implements RepositorioPaciente {
     }
 
     @Override
-    public Paciente obtener(Long numeroDocumento) {
+    public java.util.Optional<Paciente> obtener(Long numeroDocumento) {
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
         paramSource.addValue("numeroDocumento", numeroDocumento);
-        return EjecucionBaseDeDatos.obtenerUnObjetoONull(() ->
+        Paciente paciente = EjecucionBaseDeDatos.obtenerUnObjetoONull(() ->
                 this.customNamedParameterJdbcTemplate.getNamedParameterJdbcTemplate().queryForObject(sqlObtenerPorNumeroDocumento,
                         paramSource, this.mapeoPaciente));
+        return java.util.Optional.ofNullable(paciente);
     }
 
     @Override

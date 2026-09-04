@@ -76,21 +76,3 @@ test {
 	useJUnitPlatform()
 	finalizedBy jacocoTestReport
 }
-
-//Plantilla para hacer las demas tablas de doctor y citas
-/*sourceSets {
-    main {
-        java {
-            exclude 'ceiba/com/co/factura/**'
-            exclude 'ceiba/com/co/producto/**'
-            exclude 'ceiba/com/co/cliente/**'
-        }
-    }
-    test {
-        java {
-            exclude 'ceiba/com/co/factura/**'
-            exclude 'ceiba/com/co/producto/**'
-            exclude 'ceiba/com/co/cliente/**'
-        }
-    }
-}*/

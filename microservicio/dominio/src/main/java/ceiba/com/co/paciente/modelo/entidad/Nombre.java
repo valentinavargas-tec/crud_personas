@@ -18,4 +18,22 @@ public class Nombre {
     public String getValor() {
         return valor;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Nombre nombre = (Nombre) o;
+        return java.util.Objects.equals(valor, nombre.valor);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(valor);
+    }
+
+    @Override
+    public String toString() {
+        return valor;
+    }
 }

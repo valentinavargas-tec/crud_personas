@@ -57,7 +57,11 @@ public class ConfiguracionJackson {
         module.addDeserializer(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
             @Override
             public LocalDateTime deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-                return LocalDateTime.parse(jp.getText(), DateTimeFormatter.ofPattern(FORMATO_LOCAL_DATE_TIME));
+                String text = jp.getText();
+                if (text != null && text.contains("T")) {
+                    return LocalDateTime.parse(text, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                }
+                return LocalDateTime.parse(text, DateTimeFormatter.ofPattern(FORMATO_LOCAL_DATE_TIME));
             }
         });
         

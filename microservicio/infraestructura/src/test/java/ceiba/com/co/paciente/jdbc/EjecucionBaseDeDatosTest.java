@@ -1,4 +1,4 @@
-package ceiba.com.co.jdbc;
+package ceiba.com.co.paciente.jdbc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;

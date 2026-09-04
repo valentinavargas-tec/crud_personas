@@ -1,4 +1,4 @@
-package ceiba.com.co.infraestructura.adaptador.dao;
+package ceiba.com.co.paciente.infraestructura.adaptador.dao;
 
 import ceiba.com.co.paciente.adaptador.dao.DaoPacientePostgres;
 import ceiba.com.co.paciente.adaptador.dao.MapeoPacienteDTO;

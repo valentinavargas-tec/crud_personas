@@ -1,0 +1,177 @@
+{
+  "info": {
+    "name": "SGC - Sistema de Gestión de Citas Médicas",
+    "description": "Colección completa para pruebas de Pacientes, Doctores y Citas Médicas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Pacientes",
+      "item": [
+        {
+          "name": "1.1 Crear Paciente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroDocumento\": 1018234567,\n  \"tipoDocumento\": \"CC\",\n  \"nombre\": \"Valentina\",\n  \"apellido\": \"Vargas\",\n  \"fechaNacimiento\": \"1998-05-20\",\n  \"telefono\": \"3001234567\",\n  \"correoElectronico\": \"valentina@hospital.com\",\n  \"eps\": \"Sura\",\n  \"genero\": \"FEMENINO\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8084/api/pacientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "pacientes"]
+            }
+          }
+        },
+        {
+          "name": "1.2 Listar Pacientes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8084/api/pacientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "pacientes"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Doctores",
+      "item": [
+        {
+          "name": "2.1 Crear Doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroDocumento\": \"DOC-101\",\n  \"nombre\": \"Carlos\",\n  \"apellido\": \"Gomez\",\n  \"tarjetaProfesional\": \"TP-98765\",\n  \"especialidad\": \"CARDIOLOGIA\",\n  \"correoInstitucional\": \"carlos.gomez@hospital.com\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8084/api/doctores",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "doctores"]
+            }
+          }
+        },
+        {
+          "name": "2.2 Listar Doctores",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8084/api/doctores",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "doctores"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Citas Médicas",
+      "item": [
+        {
+          "name": "3.1 Agendar Cita (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pacienteDocumento\": \"1018234567\",\n  \"doctorDocumento\": \"DOC-101\",\n  \"fechaHora\": \"2026-10-15T09:00:00\",\n  \"tipoCita\": \"CONSULTA_GENERAL\",\n  \"motivo\": \"Chequeo preventivo de rutina\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8084/api/citas",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "citas"]
+            }
+          }
+        },
+        {
+          "name": "3.2 Consultar Cita por ID (GET)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8084/api/citas/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "citas", "1"]
+            }
+          }
+        },
+        {
+          "name": "3.3 Consultar Citas por Paciente (GET)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8084/api/citas/paciente/1018234567",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "citas", "paciente", "1018234567"]
+            }
+          }
+        },
+        {
+          "name": "3.4 Consultar Citas por Doctor (GET)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8084/api/citas/doctor/DOC-101",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "citas", "doctor", "DOC-101"]
+            }
+          }
+        },
+        {
+          "name": "3.5 Consultar Disponibilidad de Doctor (GET)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8084/api/citas/doctor/DOC-101/disponibilidad?fecha=2026-10-15",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8084",
+              "path": ["api", "citas", "doctor", "DOC-101", "disponibilidad"],
+              "query": [
+                {
+                  "key": "fecha",
+                  "value": "2026-10-15"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

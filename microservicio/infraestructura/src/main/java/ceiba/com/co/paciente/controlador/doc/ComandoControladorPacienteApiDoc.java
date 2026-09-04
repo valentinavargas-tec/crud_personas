@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "Pacientes", description = "Endpoints para la administración y consulta integral de Pacientes")
-@SuppressWarnings("unused")
 public interface ComandoControladorPacienteApiDoc {
 
     @Operation(
@@ -37,11 +36,15 @@ public interface ComandoControladorPacienteApiDoc {
                             summary = "Payload básico de creación",
                             value = """
                             {
-                              "cedula": 1017123456,
+                              "numeroDocumento": 1017123456,
+                              "tipoDocumento": "CEDULA_CIUDADANIA",
                               "nombre": "Carlos",
                               "apellido": "Pérez",
-                              "email": "carlos.perez@example.com",
-                              "fechaNacimiento": "1990-05-15"
+                              "fechaNacimiento": "1990-05-15",
+                              "telefono": "3001234567",
+                              "correoElectronico": "carlos.perez@example.com",
+                              "eps": "SURA",
+                              "genero": "MASCULINO"
                             }
                             """
                     )
@@ -120,8 +123,11 @@ public interface ComandoControladorPacienteApiDoc {
                             {
                               "nombre": "Carlos Alberto",
                               "apellido": "Pérez Gómez",
-                              "email": "carlos.perez.updated@example.com",
-                              "fechaNacimiento": "1990-05-15"
+                              "fechaNacimiento": "1990-05-15",
+                              "telefono": "3007654321",
+                              "correoElectronico": "carlos.perez.updated@example.com",
+                              "eps": "SURA",
+                              "genero": "MASCULINO"
                             }
                             """
                     )

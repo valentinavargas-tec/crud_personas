@@ -47,4 +47,16 @@ class ConfiguracionJacksonTest {
         assertEquals("\"2026-07-23 14:30:00\"", json);
         assertEquals(fechaHoraOriginal, fechaHoraDeserializada);
     }
+
+    @Test
+    void deberiaDeserializarLocalDateTimeIsoCorrectamente() throws JsonProcessingException {
+        // Arrange
+        String jsonIso = "\"2026-10-15T09:00:00\"";
+
+        // Act
+        LocalDateTime fechaHoraDeserializada = objectMapper.readValue(jsonIso, LocalDateTime.class);
+
+        // Assert
+        assertEquals(LocalDateTime.of(2026, 10, 15, 9, 0, 0), fechaHoraDeserializada);
+    }
 }
